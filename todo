@@ -1,0 +1,8 @@
+1 - finish the passport part (add roles like admin, simpleuser, moderator ...)
+2 - do the posts part
+3 - do the comments part with websockets
+4 - Add middlwares, pipes, guards (administrator)
+5 - finishing the whole api (adding swagger)
+
+6 - start doing the frontend part with nextjs
+

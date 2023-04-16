@@ -1,0 +1,587 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id             String    @id @unique @default(uuid())
+  email          String    @unique
+  name           String?
+  hashedPassword String
+  role           UserRole  @default(USER)
+  // posts     Post []
+  // profile   Profile?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt()
+  Post           Post[]
+  Comment        Comment[]
+  Profile        Profile[]
+}
+
+model Post {
+  id        String    @id @unique @default(uuid())
+  title     String
+  content   String?
+  published Boolean   @default(false)
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+  Comment   Comment[]
+}
+
+model Comment {
+  id        String   @id @unique @default(uuid())
+  text      String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Profile {
+  id        String   @id @unique @default(uuid())
+  bio       String?
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Notification {
+  id        String   @id @unique @default(uuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Like {
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Follow {
+  id        String   @id @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+// model PostImage {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentImage {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfileImage {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostVideo {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentVideo {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfileVideo {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostAudio {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentAudio {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfileAudio {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostFile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentFile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfileFile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostLink {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentLink {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfileLink {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostLocation {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentLocation {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfileLocation {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPoll {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPoll {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePoll {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOption {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOption {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOption {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollVote {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollVote {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollVote {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionImage {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionImage {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionImage {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionVideo {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionVideo {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionVideo {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionAudio {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionAudio {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionAudio {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionFile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionFile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionFile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionLink {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionLink {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionLink {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionLocation {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionLocation {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionLocation {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionPoll {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionPoll {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionPoll {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionProfile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionProfile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionProfile {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionPost {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionPost {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionPost {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionComment {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionComment {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionComment {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionEvent {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionEvent {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionEvent {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionGroup {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionGroup {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionGroup {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionProduct {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionProduct {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionProduct {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionService {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionService {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionService {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model PostPollOptionText {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model CommentPollOptionText {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+// model ProfilePollOptionText {
+//   id        String   @id @unique @default(uuid())
+//   url       String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt()
+// }
+
+
+
+
